@@ -32,10 +32,22 @@ async function run() {
       res.send(result);
     });
 
-    app.delete("allworks/:id", async (req, res) => {
+    app.delete("/allworks/:id", async (req, res) => {
       const id = req.params;
       const query = { _id: ObjectId(id) };
       const result = await todoCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    app.put("/allworks/:id", async (req, res) => {
+      const id = req.params;
+      const complete = req.body;
+      console.log(complete);
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updatedDoc = { $set: complete };
+
+      const result = await todoCollection.updateOne(filter, updatedDoc, options);
       res.send(result);
     });
   } finally {
